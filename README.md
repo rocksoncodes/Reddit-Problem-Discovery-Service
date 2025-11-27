@@ -1,14 +1,19 @@
-# Market Scout: The AI Agent That Finds Market Problems for You
+# Reddit Radar
+`Spot problems and insights in niche Reddit communities automatically.`
 
-A lightweight AI agent that automates early-stage market research by scanning Reddit for real user pain points, validating them with a large language model, and preparing findings for downstream storage (Notion, database, etc.). Intended for entrepreneurs and developers who want to discover validated problems worth building solutions for.
+Reddit Radar is a lightweight AI agent that automates research on specific Reddit communities by finding niche pain points, validating them with an LLM, and producing structured outputs for downstream storage (Notion, database, etc.). Perfect for entrepreneurs, developers or community managers looking to discover problems worth solving in highly focused Reddit niches.
 
-# Key ideas
+[![Python](https://img.shields.io/badge/python-3.11+-blue)](https://www.python.org/)
+[![Docs](https://img.shields.io/badge/docs-up--to--date-brightgreen?style=flat-square)](#)
 
-- Automatically collect posts and comments from configured subreddits.
-- Use an LLM (Gemini) to validate whether a discovered issue represents a meaningful market problem.
-- Produce structured outputs that can be saved to Notion or a database for later review.
 
-# Current Features (implemented)
+# Key Ideas
+
+- Automatically collect posts and comments from configured niche subreddits.
+- Use an LLM (Gemini) to validate whether a discovered issue represents a meaningful market problem within the niche.
+- Produce structured outputs that can be saved to Notion or a database for later review and prioritization.
+
+# Current Features (Implemented)
 
 - OAuth-based Reddit integration for data ingestion
 - Basic Gemini AI integration (validation prompts)
@@ -18,7 +23,7 @@ A lightweight AI agent that automates early-stage market research by scanning Re
 <img width="1832" height="967" alt="image" src="https://github.com/user-attachments/assets/334da5c1-31af-4c92-85b0-3930b28cc464" />
 
 
-Planned features are tracked in the roadmap and will be added over time.
+> Planned features are tracked in the roadmap and will be added over time.
 
 
 # Quick start
@@ -54,9 +59,9 @@ Open `.env` and set the required keys (see Configuration below).
 
 ### 4. Run the ingest agent (example)
 
-    ```bash
-       python engines\ingest_engine.py
-    ```
+```bash
+   python engines\ingest_engine.py
+```
 
 Depending on the agent/engine you want to run, use the corresponding script under `engines/`.
 
@@ -70,8 +75,8 @@ REDDIT_CLIENT_ID       # Reddit API client ID
 REDDIT_CLIENT_SECRET   # Reddit API secret
 REDDIT_USER_AGENT      # Reddit API user agent string
 GEMINI_API_KEY         # Gemini / Google LLM API key
-NOTION_API_KEY         # (optional) Notion integration key
-NOTION_DB_ID           # (optional) Notion database id
+NOTION_API_KEY         # Notion integration key
+NOTION_DB_ID           # Notion database id
 ```
 
 Notes:
@@ -79,7 +84,7 @@ Notes:
 Keep secrets out of version control. Use a secrets manager for production.
 ```
 
-# Project structure (overview)
+# Project structure (Overview)
 
 - clients/        thin API clients (Reddit, Gemini)
 - engines/        runnable scripts / entrypoints (reddit_ingest, curator)
