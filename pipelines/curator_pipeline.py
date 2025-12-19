@@ -1,4 +1,4 @@
-from services.curator_service import CuratorService
+from services.core.curator_service import CuratorService
 from utils.logger import logger
 
 

@@ -32,6 +32,7 @@ class CuratorService:
         posts_with_sentiments = (
             session.query(Post, Sentiment)
             .join(Sentiment, Sentiment.post_id == Post.submission_id)
+            .limit(30)
             .all()
         )
 

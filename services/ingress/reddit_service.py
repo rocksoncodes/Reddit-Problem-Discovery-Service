@@ -1,5 +1,5 @@
-from services.scraper_service import ScraperService
-from services.storage_service import StorageService
+from services.ingress.scraper_service import ScraperService
+from services.egress.storage_service import StorageService
 from typing import Dict, Any
 from utils.logger import logger
 

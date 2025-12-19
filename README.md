@@ -15,7 +15,7 @@ High-signal insights are often buried across posts and comment threads, making i
 
 
 # Solution
-Reddit Radar automates this workflow through a backend-first, modular architecture.
+The Reddit-Problem-Discovery-Service automates this workflow through a backend-first, modular architecture.
 
 The system:
 1. Ingests posts and comments from configured subreddits via Reddit’s API
@@ -46,7 +46,7 @@ The project is designed as a set of composable services and pipelines, making it
 # Project Structure (High-Level)
 
 - `clients/` – Thin API clients (Reddit, Gemini)
-- `engines/` – Runnable entry points (ingestion, curation)
+- `engines/` – Runnable entry points (ingress, core, egress)
 - `services/` – Core business logic and integrations
 - `pipelines/` – Data processing and analysis pipelines
 - `database/` – SQLAlchemy models and DB setup

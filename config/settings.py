@@ -37,6 +37,8 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 DEFAULT_SUBREDDITS: List[str] = [
     "Entrepreneur",
     "smallbusiness",
+    "AskReddit",
+    "CasualConversation",
     "Business_Ideas",
     "ghana"
 ]
@@ -59,7 +61,7 @@ AGENT_MODEL = "gemini-2.5-flash"
 SCOUT_OBJECTIVE = """
 You are a market scout agent.
 
-Your input will come directly from the database using the `feeder()` function.
+Your ingress will come directly from the database using the `feeder()` function.
 
 Each record returned by that method includes:
 - Post Number
