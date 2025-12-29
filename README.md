@@ -109,8 +109,6 @@ Keep secrets out of version control. Use a secrets manager for production.
 - ✅ Gemini integration for evaluation
 - ✅ Notion sync and email notifications
 
----
-
 # 9. Contributing
 Contributions and PRs are welcome. Suggested ways to help:
 - Improve signal quality and filtering
