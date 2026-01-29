@@ -4,6 +4,7 @@ from utils.logger import logger
 
 execute = RedditService()
 
+
 def scrape_reddit_data() -> Dict[str, List[Any]]:
 
     try:

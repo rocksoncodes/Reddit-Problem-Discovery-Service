@@ -5,6 +5,7 @@ from utils.logger import logger
 
 _reddit_instance = None
 
+
 def _validate_reddit_secrets(reddit_secrets: dict) -> bool:
 
     missing_keys = []
@@ -17,13 +18,15 @@ def _validate_reddit_secrets(reddit_secrets: dict) -> bool:
             missing_keys.append(reddit_key)
 
     if missing_keys:
-        logger.error(f"Failed to load {len(missing_keys)} Reddit environment variable(s)")
+        logger.error(
+            f"Failed to load {len(missing_keys)} Reddit environment variable(s)")
         for key in missing_keys:
             logger.info(f"Missing Reddit environment variable: {key}")
         return False
 
     if found_keys:
-        logger.info(f" {len(found_keys)} Reddit environment variables were loaded successfully")
+        logger.info(
+            f" {len(found_keys)} Reddit environment variables were loaded successfully")
 
     return True
 
@@ -43,7 +46,8 @@ def _create_reddit_client() -> praw.Reddit | None:
     }
 
     if not _validate_reddit_secrets(reddit_secrets):
-        logger.error("Connection to the Reddit API failed due to missing environment variable(s)")
+        logger.error(
+            "Connection to the Reddit API failed due to missing environment variable(s)")
         return None
 
     try:

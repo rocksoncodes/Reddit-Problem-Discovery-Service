@@ -15,6 +15,7 @@ class CoreService:
     """
     Service for querying posts with sentiments, executing the curator agent and storing agent responses.
     """
+
     def __init__(self):
         self.session = get_session()
         self.agent = initialize_gemini()
@@ -56,9 +57,9 @@ class CoreService:
             return post_records
 
         except Exception as e:
-            logger.error(f"Error querying posts with sentiments from the database!:{e}",exc_info=True)
+            logger.error(
+                f"Error querying posts with sentiments from the database!:{e}", exc_info=True)
             raise SystemExit
-
 
     def execute_curator_agent(self):
         """
@@ -71,7 +72,8 @@ class CoreService:
             response = self.agent.models.generate_content(
                 model=settings.AGENT_MODEL,
                 contents=settings.SCOUT_OBJECTIVE,
-                config=provide_agent_tools(tools=[self.query_posts_with_sentiments])
+                config=provide_agent_tools(
+                    tools=[self.query_posts_with_sentiments])
             )
 
             logger.info("Curator Agent executed successfully..")
@@ -86,14 +88,15 @@ class CoreService:
 
         except errors.ClientError as e:
             if "RESOURCE_EXHAUSTED" in str(e):
-                logger.error("Quota exceeded. Try again after reset or switch models.")
+                logger.error(
+                    "Quota exceeded. Try again after reset or switch models.")
                 return {"error": "Quota exceeded"}
             raise
 
         except Exception as e:
-            logger.error(f"Unexpected error while running Market Scout Agent: {e}")
+            logger.error(
+                f"Unexpected error while running Market Scout Agent: {e}")
             raise SystemExit("Agent terminated due to an error.")
-
 
     def store_curator_response(self):
         """
@@ -106,19 +109,22 @@ class CoreService:
             try:
                 self.execute_curator_agent()
             except Exception as e:
-                logger.error(f"Failed to run curator agent: {e}", exc_info=True)
+                logger.error(
+                    f"Failed to run curator agent: {e}", exc_info=True)
 
         try:
             curated_brief = ProcessedBriefs(
-                curated_content = self.curator_agent_response
+                curated_content=self.curator_agent_response
             )
             session.add(curated_brief)
             session.commit()
-            logger.info("Curator response stored successfully in the database.")
+            logger.info(
+                "Curator response stored successfully in the database.")
 
         except Exception as e:
             session.rollback()
-            logger.error(f"Failed to store curator response: {e}", exc_info=True)
+            logger.error(
+                f"Failed to store curator response: {e}", exc_info=True)
 
         finally:
             session.close()

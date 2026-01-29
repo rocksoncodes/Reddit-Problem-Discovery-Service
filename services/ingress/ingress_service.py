@@ -9,12 +9,13 @@ class IngressService:
     Service for handling Reddit data ingestion, including fetching posts and comments
     from specified subreddits using the Reddit API client.
     """
+
     def __init__(self):
         self.reddit = get_reddit_client()
         self.subreddits = settings.DEFAULT_SUBREDDITS
         self.post_limit = settings.DEFAULT_POST_LIMIT
         self.comment_limit = settings.DEFAULT_COMMENT_LIMIT
-        self.min_comments =  settings.MIN_COMMENTS
+        self.min_comments = settings.MIN_COMMENTS
         self.min_score = settings.MIN_SCORE
         self.min_upvote_ratio = settings.MIN_UPVOTE_RATIO
         self.posts = []
@@ -34,10 +35,13 @@ class IngressService:
         posts: List[Dict[str, Any]] = []
 
         for subreddit_name in self.subreddits:
-            logger.info(f"Fetching posts from r/{subreddit_name} (limit={self.post_limit})...")
+            logger.info(
+                f"Fetching posts from r/{subreddit_name} (limit={self.post_limit})...")
             try:
-                subreddit_posts = list(self.reddit.subreddit(subreddit_name).hot(limit=self.post_limit))
-                logger.info(f"Retrieved {len(subreddit_posts)} posts from r/{subreddit_name}.")
+                subreddit_posts = list(self.reddit.subreddit(
+                    subreddit_name).hot(limit=self.post_limit))
+                logger.info(
+                    f"Retrieved {len(subreddit_posts)} posts from r/{subreddit_name}.")
                 for submission in subreddit_posts:
                     if (
                         submission.upvote_ratio >= self.min_upvote_ratio
@@ -58,12 +62,12 @@ class IngressService:
                         posts.append(post_data)
 
             except Exception as e:
-                logger.error(f"Error fetching posts from r/{subreddit_name}: {e}", exc_info=True)
+                logger.error(
+                    f"Error fetching posts from r/{subreddit_name}: {e}", exc_info=True)
 
         self.posts = posts
         logger.info(f"Completed fetching posts. Total collected: {len(posts)}")
         return posts
-    
 
     def fetch_post_ids(self) -> List[str]:
         """
@@ -73,7 +77,8 @@ class IngressService:
         """
 
         if not self.posts:
-            logger.warning("No posts available. Running fetch_reddit_posts() first...")
+            logger.warning(
+                "No posts available. Running fetch_reddit_posts() first...")
             self.fetch_reddit_posts()
 
         submission_ids: List[str] = []
@@ -86,7 +91,6 @@ class IngressService:
         self.submission_ids = submission_ids
         logger.info(f"Extracted {len(submission_ids)} submission IDs.")
         return submission_ids
-    
 
     def fetch_reddit_comments(self) -> List[Dict[str, Any]]:
         """
@@ -95,11 +99,13 @@ class IngressService:
             List[Dict[str, Any]]: List of comment data dictionaries.
         """
         if not self.submission_ids:
-            logger.warning("No submission IDs available. Running fetch_post_ids()...")
+            logger.warning(
+                "No submission IDs available. Running fetch_post_ids()...")
             self.fetch_post_ids()
 
         comments_collected: List[Dict[str, Any]] = []
-        logger.info(f"Fetching comments from {len(self.submission_ids)} submissions...")
+        logger.info(
+            f"Fetching comments from {len(self.submission_ids)} submissions...")
 
         for submission_id in self.submission_ids:
             try:
@@ -125,8 +131,10 @@ class IngressService:
                     comments_collected.append(comment_data)
 
             except Exception as e:
-                logger.error(f"Error fetching comments for submission {submission_id}: {e}", exc_info=True)
+                logger.error(
+                    f"Error fetching comments for submission {submission_id}: {e}", exc_info=True)
 
         self.comments = comments_collected
-        logger.info(f"Completed. Total comments collected: {len(comments_collected)}")
+        logger.info(
+            f"Completed. Total comments collected: {len(comments_collected)}")
         return comments_collected

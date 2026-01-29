@@ -21,6 +21,7 @@ class EgressService:
     """
     Service class responsible for generating reports, creating Notion pages, formatting emails and sending emails.
     """
+
     def __init__(self):
         self.queried_brief = None
         self.formatted_email = None
@@ -61,14 +62,15 @@ class EgressService:
                     "curated_content": queried_brief.curated_content
                 }
 
-                logger.info(f"Successfully queried brief ID {queried_brief.id} from the database.")
+                logger.info(
+                    f"Successfully queried brief ID {queried_brief.id} from the database.")
                 self.queried_brief = query_result
                 return query_result
 
         except Exception as e:
-            logger.error(f"Error querying briefs from the database: {e}", exc_info=True)
+            logger.error(
+                f"Error querying briefs from the database: {e}", exc_info=True)
             return None
-
 
     def _chunk_text(self):
         """
@@ -116,7 +118,6 @@ class EgressService:
             logger.error(f"Error while chunking text: {e}", exc_info=True)
             return []
 
-
     def _create_notion_blocks(self):
         """
         Create Notion paragraph blocks from chunked text for page creation.
@@ -125,7 +126,7 @@ class EgressService:
         """
         SAFE_MAX = 1950
         notion_blocks = []
-        
+
         try:
             for block in self.notion_blocks:
                 start = 0
@@ -148,7 +149,6 @@ class EgressService:
             logger.error(f"Error creating Notion blocks: {e}", exc_info=True)
             return []
 
-
     def create_notion_page(self):
         """
         Create a Notion page with the chunked and formatted content blocks.
@@ -157,7 +157,8 @@ class EgressService:
             self._chunk_text()
             notion_blocks = self._create_notion_blocks()
             if not notion_blocks:
-                logger.warning("No Notion blocks to publish. Aborting page creation...")
+                logger.warning(
+                    "No Notion blocks to publish. Aborting page creation...")
                 return
 
             children_blocks = [
@@ -184,16 +185,18 @@ class EgressService:
             if response.get("request_id"):
                 logger.info("Notion page created successfully.")
             else:
-                logger.warning("Notion page creation response received but request_id missing.")
+                logger.warning(
+                    "Notion page creation response received but request_id missing.")
 
         except APIResponseError as error:
             if error.code == APIErrorCode.ObjectNotFound:
-                logger.error("The specified parent page was not found.", exc_info=True)
+                logger.error(
+                    "The specified parent page was not found.", exc_info=True)
             else:
                 logger.error(f"Notion API error: {error}", exc_info=True)
         except Exception as e:
-            logger.error(f"Unexpected error creating Notion page: {e}", exc_info=True)
-
+            logger.error(
+                f"Unexpected error creating Notion page: {e}", exc_info=True)
 
     def _format_email(self):
         """
@@ -217,14 +220,14 @@ class EgressService:
                 footer_text=self.footer_text
             )
 
-            logger.info(f"Email rendered for brief ID {self.queried_brief.get('id')}")
+            logger.info(
+                f"Email rendered for brief ID {self.queried_brief.get('id')}")
             return self.formatted_email
 
         except Exception as e:
             logger.error(f"Email formatting failed: {e}", exc_info=True)
             self.formatted_email = ""
             return ""
-
 
     def send_email(self, subject="Reddit Problem Report!"):
         """

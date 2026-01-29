@@ -17,15 +17,18 @@ class Post(Base):
     post_url = Column(Text)
     is_processed = Column(Boolean, default=False)
 
-    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
-    sentiments = relationship("Sentiment", back_populates="post", cascade="all, delete-orphan")
+    comments = relationship(
+        "Comment", back_populates="post", cascade="all, delete-orphan")
+    sentiments = relationship(
+        "Sentiment", back_populates="post", cascade="all, delete-orphan")
 
 
 class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    submission_id = Column(String(20), ForeignKey("posts.submission_id"), nullable=False)
+    submission_id = Column(String(20), ForeignKey(
+        "posts.submission_id"), nullable=False)
     subreddit = Column(String(100), nullable=False)
     title = Column(Text, nullable=False)
     author = Column(String(255))
@@ -38,9 +41,10 @@ class Comment(Base):
 class Sentiment(Base):
     __tablename__ = "sentiments"
 
-    id =  Column(Integer, primary_key=True, autoincrement=True)
-    post_id = Column(String(20), ForeignKey("posts.submission_id"), nullable=False)
-    sentiment_results =  Column(JSON, nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    post_id = Column(String(20), ForeignKey(
+        "posts.submission_id"), nullable=False)
+    sentiment_results = Column(JSON, nullable=False)
 
     post = relationship("Post", back_populates="sentiments")
 
