@@ -2,7 +2,7 @@ from services.egress_service import EgressService
 from config import settings
 from utils.logger import logger
 
-class EgressController:
+class EgressOrchestrator:
     """
     Controller responsible for co-ordinating the delivery of processed reports.
     """

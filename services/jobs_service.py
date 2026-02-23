@@ -1,7 +1,7 @@
-from controllers.ingress_controller import IngressController
-from controllers.sentiment_controller import SentimentController
-from controllers.core_controller import CoreController
-from controllers.egress_controller import EgressController
+from orchestrators.ingress_orchestrator import IngressOrchestrator
+from orchestrators.sentiment_orchestrator import SentimentOrchestrator
+from orchestrators.core_orchestrator import CoreOrchestrator
+from orchestrators.egress_orchestrator import EgressOrchestrator
 from database.session import get_session
 from utils.logger import logger
 from config import settings
@@ -35,15 +35,15 @@ class JobService:
 
     def run_all_pipelines(self):
         """
-        Runs the controllers synchronously in the correct order:
+        Runs the orchestrators synchronously in the correct order:
         Ingress -> Sentiment -> Core -> Egress
         """
         logger.info("Starting full pipeline sequence")
         
-        ingress = IngressController()
-        sentiment = SentimentController()
-        core = CoreController()
-        egress = EgressController()
+        ingress = IngressOrchestrator()
+        sentiment = SentimentOrchestrator()
+        core = CoreOrchestrator()
+        egress = EgressOrchestrator()
 
         self.safe_run(ingress.run)()
         self.safe_run(sentiment.run)()

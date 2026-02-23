@@ -5,10 +5,7 @@ from email.message import EmailMessage
 from smtplib import SMTPAuthenticationError, SMTPConnectError
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from notion_client import APIErrorCode, APIResponseError, Client
-from sqlalchemy.orm import sessionmaker
-from database.engine import database_engine
 from database.session import get_session
-from database.models import ProcessedBriefs
 from utils.logger import logger
 from config import settings
 

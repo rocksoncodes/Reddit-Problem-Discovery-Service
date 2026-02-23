@@ -1,7 +1,7 @@
 from services.core_service import CoreService
 from utils.logger import logger
 
-class CoreController:
+class CoreOrchestrator:
     """
     Controller responsible for orchestrating the AI curation process.
     """

@@ -1,14 +1,14 @@
-from controllers.ingress_controller import IngressController
-from controllers.sentiment_controller import SentimentController
-from controllers.core_controller import CoreController
-from controllers.egress_controller import EgressController
+from orchestrators.ingress_orchestrator import IngressOrchestrator
+from orchestrators.sentiment_orchestrator import SentimentOrchestrator
+from orchestrators.core_orchestrator import CoreOrchestrator
+from orchestrators.egress_orchestrator import EgressOrchestrator
 from config import settings
 
 if __name__ == "__main__":
-    ingress = IngressController()
-    sentiment = SentimentController()
-    core = CoreController()
-    egress = EgressController()
+    ingress = IngressOrchestrator()
+    sentiment = SentimentOrchestrator()
+    core = CoreOrchestrator()
+    egress = EgressOrchestrator()
     
     ingress.run()
     sentiment.run()
