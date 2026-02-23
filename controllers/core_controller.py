@@ -8,6 +8,7 @@ class CoreController:
     def __init__(self):
         self.service = CoreService()
 
+
     def run(self):
         """
         Executes the core curation pipeline: execute agent and store response.

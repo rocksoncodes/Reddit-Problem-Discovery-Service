@@ -9,6 +9,7 @@ class CommentRepository:
     def __init__(self, session: Session):
         self.session = session
 
+
     def create_comments(self, comments_data: List[Dict]) -> int:
         """
         Store multiple comments in the database.

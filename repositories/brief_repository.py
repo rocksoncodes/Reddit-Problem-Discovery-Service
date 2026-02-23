@@ -9,6 +9,7 @@ class BriefRepository:
     def __init__(self, session: Session):
         self.session = session
 
+
     def create_brief(self, content: str) -> ProcessedBriefs:
         """
         Store a new AI-generated brief.
@@ -16,6 +17,7 @@ class BriefRepository:
         brief = ProcessedBriefs(curated_content=content)
         self.session.add(brief)
         return brief
+
 
     def get_latest_brief(self) -> Optional[ProcessedBriefs]:
         """

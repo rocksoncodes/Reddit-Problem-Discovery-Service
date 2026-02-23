@@ -12,6 +12,7 @@ class EgressController:
         self.email_only = settings.CHOICE_TWO
         self.all_channels = settings.CHOICE_THREE
 
+
     def _send_by_channel(self, choice):
         """
         Decides which output channels to use based on the user's choice.
@@ -23,6 +24,7 @@ class EgressController:
         if choice in (self.email_only, self.all_channels):
             logger.info("Sending email report...")
             self.service.send_email()
+
 
     def run(self, choice):
         """

@@ -25,6 +25,7 @@ class CoreService:
         self.post_with_sentiments = []
         self.curator_agent_response = None
 
+
     def query_posts_with_sentiments(self) -> List[Dict]:
         """
         Call the query_posts_with_sentiments() function to obtain posts and their sentiment analysis results.
@@ -57,6 +58,7 @@ class CoreService:
             logger.error(
                 f"Error querying posts with sentiments from the database!:{e}", exc_info=True)
             raise SystemExit
+
 
     def execute_curator_agent(self):
         """
@@ -94,6 +96,7 @@ class CoreService:
             logger.error(
                 f"Unexpected error while running Market Scout Agent: {e}")
             raise SystemExit("Agent terminated due to an error.")
+
 
     def store_curator_response(self):
         """

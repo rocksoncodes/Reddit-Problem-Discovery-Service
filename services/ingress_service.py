@@ -1,6 +1,7 @@
 from typing import Dict, List, Any
 from config import settings
 from utils.logger import logger
+from utils.helpers import get_posts_from_subreddit, get_comments_from_submission
 from clients.reddit_client import get_reddit_client
 
 
@@ -22,6 +23,7 @@ class IngressService:
         self.submission_ids = []
         self.comments = []
 
+
     def fetch_reddit_posts(self) -> List[Dict[str, Any]]:
         """
         Fetch Reddit posts from the configured subreddits that meet minimum criteria.
@@ -35,39 +37,24 @@ class IngressService:
         posts: List[Dict[str, Any]] = []
 
         for subreddit_name in self.subreddits:
-            logger.info(
-                f"Fetching posts from r/{subreddit_name} (limit={self.post_limit})...")
+            logger.info(f"Fetching posts from r/{subreddit_name} (limit={self.post_limit})...")
             try:
-                subreddit_posts = list(self.reddit.subreddit(
-                    subreddit_name).hot(limit=self.post_limit))
-                logger.info(
-                    f"Retrieved {len(subreddit_posts)} posts from r/{subreddit_name}.")
-                for submission in subreddit_posts:
-                    if (
-                        submission.upvote_ratio >= self.min_upvote_ratio
-                        and submission.score >= self.min_score
-                        and submission.num_comments >= self.min_comments
-                        and not submission.stickied
-                    ):
-                        post_data: Dict[str, Any] = {
-                            "subreddit": subreddit_name,
-                            "submission_id": submission.id,
-                            "title": submission.title,
-                            "body": submission.selftext,
-                            "upvote_ratio": submission.upvote_ratio,
-                            "score": submission.score,
-                            "number_of_comments": submission.num_comments,
-                            "post_url": submission.url
-                        }
-                        posts.append(post_data)
-
+                subreddit_posts = get_posts_from_subreddit(
+                    self.reddit,
+                    subreddit_name,
+                    self.post_limit,
+                    self.min_upvote_ratio,
+                    self.min_score,
+                    self.min_comments
+                )
+                posts.extend(subreddit_posts)
             except Exception as e:
-                logger.error(
-                    f"Error fetching posts from r/{subreddit_name}: {e}", exc_info=True)
+                logger.error(f"Error fetching posts from r/{subreddit_name}: {e}", exc_info=True)
 
         self.posts = posts
         logger.info(f"Completed fetching posts. Total collected: {len(posts)}")
         return posts
+
 
     def fetch_post_ids(self) -> List[str]:
         """
@@ -75,22 +62,20 @@ class IngressService:
         Returns:
             List[str]: List of submission IDs.
         """
-
         if not self.posts:
-            logger.warning(
-                "No posts available. Running fetch_reddit_posts() first...")
+            logger.warning("No posts available. Running fetch_reddit_posts() first...")
             self.fetch_reddit_posts()
 
         submission_ids: List[str] = []
 
         for post in self.posts:
             if "submission_id" in post:
-                submission_id = post["submission_id"]
-                submission_ids.append(submission_id)
+                submission_ids.append(post["submission_id"])
 
         self.submission_ids = submission_ids
         logger.info(f"Extracted {len(submission_ids)} submission IDs.")
         return submission_ids
+
 
     def fetch_reddit_comments(self) -> List[Dict[str, Any]]:
         """
@@ -99,42 +84,19 @@ class IngressService:
             List[Dict[str, Any]]: List of comment data dictionaries.
         """
         if not self.submission_ids:
-            logger.warning(
-                "No submission IDs available. Running fetch_post_ids()...")
+            logger.warning("No submission IDs available. Running fetch_post_ids()...")
             self.fetch_post_ids()
 
         comments_collected: List[Dict[str, Any]] = []
-        logger.info(
-            f"Fetching comments from {len(self.submission_ids)} submissions...")
+        logger.info(f"Fetching comments from {len(self.submission_ids)} submissions...")
 
         for submission_id in self.submission_ids:
             try:
-                submission = self.reddit.submission(id=submission_id)
-                submission.comments.replace_more(limit=0)
-
-                comments = submission.comments.list()
-                if self.comment_limit:
-                    comments = comments[:self.comment_limit]
-
-                for comment in comments:
-                    if not comment.body or comment.body in ("[deleted]", "[removed]"):
-                        continue
-
-                    comment_data: Dict[str, Any] = {
-                        "submission_id": submission.id,
-                        "title": submission.title,
-                        "subreddit": submission.subreddit.display_name,
-                        "author": str(comment.author) if comment.author else "Unknown",
-                        "body": comment.body,
-                        "score": comment.score
-                    }
-                    comments_collected.append(comment_data)
-
+                comments = get_comments_from_submission(self.reddit, submission_id, self.comment_limit)
+                comments_collected.extend(comments)
             except Exception as e:
-                logger.error(
-                    f"Error fetching comments for submission {submission_id}: {e}", exc_info=True)
+                logger.error(f"Error fetching comments for submission {submission_id}: {e}", exc_info=True)
 
         self.comments = comments_collected
-        logger.info(
-            f"Completed. Total comments collected: {len(comments_collected)}")
+        logger.info(f"Completed. Total comments collected: {len(comments_collected)}")
         return comments_collected

@@ -9,6 +9,7 @@ class SentimentRepository:
     def __init__(self, session: Session):
         self.session = session
 
+
     def create_sentiments(self, sentiments_data: List[Dict]):
         """
         Store sentiment results.
@@ -20,6 +21,7 @@ class SentimentRepository:
                 sentiment_results=data.get("sentiment_results")
             )
             self.session.add(sentiment)
+
 
     def mark_as_curated(self, submission_ids: List[str]):
         """

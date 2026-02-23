@@ -9,6 +9,7 @@ class IngressController:
     def __init__(self):
         pass
 
+
     def run(self):
         """
         Executes the ingress process: database initialization, data scraping and storage.

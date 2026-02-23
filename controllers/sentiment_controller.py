@@ -8,6 +8,7 @@ class SentimentController:
     def __init__(self):
         self.service = SentimentService()
 
+
     def run(self):
         """
         Executes the sentiment analysis pipeline: query, analyze, summarize, and store.
