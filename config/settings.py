@@ -1,8 +1,19 @@
 import os
 from dotenv import load_dotenv
 from typing import List
+from utils.logger import logger
+from services.infisical_service import InfisicalSecretsService
 
 load_dotenv()
+
+# Initialize and load secrets from Infisical
+try:
+    infisical = InfisicalSecretsService()
+    infisical.authenticate_inifisical_client()
+    infisical.load_infisical_secrets()
+except Exception as e:
+    logger.error(f"Failed to load secrets from Infisical: {e}")
+
 
 # =====================================================
 # REDDIT CONFIGURATION
