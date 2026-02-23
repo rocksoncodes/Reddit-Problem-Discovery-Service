@@ -4,7 +4,7 @@ from pipelines.sentiment_pipeline import execute_sentiment_pipeline
 from utils.logger import logger
 
 
-def execute_ingress_pipeline():
+def run_ingress_pipeline():
     try:
         logger.info("=== Starting Egress pipeline ===")
         init_db()

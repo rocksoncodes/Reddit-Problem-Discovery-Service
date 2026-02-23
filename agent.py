@@ -1,8 +1,8 @@
 from apscheduler.schedulers.background import BlockingScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from pipelines.egress_pipeline import execute_egress_pipeline
-from pipelines.core_pipeline import execute_core_pipeline
-from pipelines.ingress_pipeline import execute_ingress_pipeline
+from pipelines.egress_pipeline import run_egress_pipeline
+from pipelines.core_pipeline import run_core_pipeline
+from pipelines.ingress_pipeline import run_ingress_pipeline
 from datetime import datetime, timedelta
 from utils.logger import logger
 from config import settings
@@ -18,14 +18,14 @@ jobstores = {
 scheduler = BlockingScheduler(jobstores=jobstores)
 
 
-def safe_execute(func):
+def safe_run(function):
     def wrapper():
         try:
-            logger.info(f"Running {func.__name__}")
-            func()
-            logger.info(f"Finished {func.__name__}")
+            logger.info(f"Running {function.__name__}")
+            function()
+            logger.info(f"Finished {function.__name__}")
         except Exception:
-            logger.exception(f"Error running {func.__name__}")
+            logger.exception(f"Error running {function.__name__}")
     return wrapper
 
 
@@ -35,9 +35,9 @@ def run_all_pipelines():
     Ingress -> Core -> Egress
     """
     logger.info("Starting full pipeline sequence")
-    safe_execute(execute_ingress_pipeline)()
-    safe_execute(execute_core_pipeline)()
-    safe_execute(lambda: execute_egress_pipeline(all_channels))()
+    safe_run(run_ingress_pipeline)()
+    safe_run(run_core_pipeline)()
+    safe_run(lambda: run_egress_pipeline(all_channels))()
     logger.info("Full pipeline sequence finished")
 
 

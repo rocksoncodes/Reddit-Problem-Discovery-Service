@@ -1,4 +1,4 @@
-from services.egress.egress_service import EgressService
+from services.egress_service import EgressService
 from config import settings
 from utils.logger import logger
 
@@ -16,7 +16,7 @@ def _send_by_channel(execute, choice):
         execute.send_email()
 
 
-def execute_egress_pipeline(choice):
+def run_egress_pipeline(choice):
     """Pipeline responsible for executing the Egress methods in order"""
     try:
         logger.info("=== Starting Egress pipeline ===")

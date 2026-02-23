@@ -1,4 +1,4 @@
-from services.core.sentiment_service import SentimentService
+from services.sentiment_service import SentimentService
 from utils.logger import logger
 
 

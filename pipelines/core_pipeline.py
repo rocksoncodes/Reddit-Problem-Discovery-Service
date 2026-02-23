@@ -1,8 +1,8 @@
-from services.core.core_service import CoreService
+from services.core_service import CoreService
 from utils.logger import logger
 
 
-def execute_core_pipeline():
+def run_core_pipeline():
     try:
         logger.info("=== Starting curator pipeline ===")
         execute = CoreService()

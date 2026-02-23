@@ -1,5 +1,5 @@
 from typing import Any, Dict, List
-from services.ingress.reddit_service import RedditService
+from services.reddit_service import RedditService
 from utils.logger import logger
 
 execute = RedditService()
