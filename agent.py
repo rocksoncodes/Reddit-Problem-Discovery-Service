@@ -3,7 +3,10 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from pipelines.egress_pipeline import run_egress_pipeline
 from pipelines.core_pipeline import run_core_pipeline
 from pipelines.ingress_pipeline import run_ingress_pipeline
+from services.jobs_service import JobService
 from datetime import datetime, timedelta
+from database.models import Post, CuratedItem
+from database.session import get_session
 from utils.logger import logger
 from config import settings
 
@@ -17,37 +20,25 @@ jobstores = {
 }
 scheduler = BlockingScheduler(jobstores=jobstores)
 
-
-def safe_run(function):
-    def wrapper():
-        try:
-            logger.info(f"Running {function.__name__}")
-            function()
-            logger.info(f"Finished {function.__name__}")
-        except Exception:
-            logger.exception(f"Error running {function.__name__}")
-    return wrapper
-
-
-def run_all_pipelines():
-    """
-    Runs the pipelines synchronously in the correct order:
-    Ingress -> Core -> Egress
-    """
-    logger.info("Starting full pipeline sequence")
-    safe_run(run_ingress_pipeline)()
-    safe_run(run_core_pipeline)()
-    safe_run(lambda: run_egress_pipeline(all_channels))()
-    logger.info("Full pipeline sequence finished")
-
+agent_job = JobService()
 
 # Schedule every 2 weeks
 scheduler.add_job(
-    run_all_pipelines,
+    agent_job.run_all_pipelines,
     trigger="interval",
     weeks=2,
     next_run_time=datetime.now() + timedelta(seconds=10),
     id="full_pipeline_sequence",
+    replace_existing=True
+)
+
+# Schedule cleanup every 2 weeks
+scheduler.add_job(
+    agent_job.safe_run(agent_job.cleanup_curated_data),
+    trigger="interval",
+    weeks=2,
+    next_run_time=datetime.now() + timedelta(days=1),
+    id="cleanup_curated_data",
     replace_existing=True
 )
 
