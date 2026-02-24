@@ -78,7 +78,7 @@ python main.py
 ## 5. Project Structure
 
 ```
-Reddit-PainPoint-Service/
+Reddit-PainPoint-Agent/
 ├── agent.py                    # Background scheduler (APScheduler)
 ├── main.py                     # Manual entry point
 │
