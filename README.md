@@ -109,7 +109,7 @@ Reddit-PainPoint-Service/
 ├── database/                   # Models and DB initialization
 │   └── models.py
 │
-├── config/
+├── settings/
 │   └── settings.py             # Settings & env variable mapping
 │
 └── utils/
@@ -121,7 +121,7 @@ Reddit-PainPoint-Service/
 
 ## 6. Secrets Management
 
-Secrets are loaded dynamically at startup using `InfisicalSecretsService`. When the app initializes, `config/settings.py` authenticates with Infisical and injects all project secrets into the environment before any constants are resolved.
+Secrets are loaded dynamically at startup using `InfisicalSecretsService`. When the app initializes, `settings/settings.py` authenticates with Infisical and injects all project secrets into the environment before any constants are resolved.
 
 The following secrets should be configured in your Infisical project:
 
@@ -165,4 +165,4 @@ The following secrets should be configured in your Infisical project:
 
 ## 10. Project Wiki
 
-See [`project wiki/Home.md`](project%20wiki/Home.md) for extended rationale, architecture notes, and running notes.
+See [`project wiki/Home.md`](project%20wiki/Home.md) for extended rationale, architecture notes and running notes.

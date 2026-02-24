@@ -7,7 +7,7 @@ from notion_client import APIErrorCode, APIResponseError, Client
 from database.session import get_session
 from utils.logger import logger
 from utils.helpers import chunk_text, create_notion_blocks, format_email
-from config import settings
+from settings import settings
 
 from repositories.brief_repository import BriefRepository
 

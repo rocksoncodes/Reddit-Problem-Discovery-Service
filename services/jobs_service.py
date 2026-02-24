@@ -4,7 +4,7 @@ from pipelines.core_pipeline import CorePipeline
 from pipelines.egress_pipeline import EgressPipeline
 from database.session import get_session
 from utils.logger import logger
-from config import settings
+from settings import settings
 
 from repositories.post_repository import PostRepository
 

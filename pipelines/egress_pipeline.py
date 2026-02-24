@@ -1,6 +1,6 @@
 from services.egress_service import EgressService
 from utils.helpers import send_by_channel
-from config import settings
+from settings import settings
 from utils.logger import logger
 
 class EgressPipeline:
