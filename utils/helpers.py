@@ -287,3 +287,23 @@ def format_email(
     except Exception as e:
         logger.error(f"Email formatting failed: {e}", exc_info=True)
         return ""
+
+
+def send_by_channel(service: Any, choice: str, notion_only: str, email_only: str, all_channels: str) -> None:
+    """
+    Dispatch a processed brief to the appropriate output channels.
+    Args:
+        service: An EgressService instance with create_notion_page() and send_email() methods.
+        choice (str): The user's selected output channel.
+        notion_only (str): Config value representing the Notion-only choice.
+        email_only (str): Config value representing the email-only choice.
+        all_channels (str): Config value representing the all-channels choice.
+    """
+    if choice in (notion_only, all_channels):
+        logger.info("Publishing to Notion...")
+        service.create_notion_page()
+
+    if choice in (email_only, all_channels):
+        logger.info("Sending email report...")
+        service.send_email()
+        
